@@ -2,10 +2,14 @@ const express = require('express');
 const logger = require('morgan');
 // const movies = require('./routes/movies') ;
 const users = require('./app/api/router/userRouter');
+const data = require('./app/api/router/dataRouter');
+const relay = require('./app/api/router/relayRouter');
 const bodyParser = require('body-parser');
 const mongoose = require('./app/api/config/database'); //database configuration
 var jwt = require('jsonwebtoken');
+const cors = require('cors');
 const app = express();
+app.use(cors());
 app.set('secretKey', 'nodeRestApi'); // jwt secret token
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -17,6 +21,8 @@ res.json({"message" : "Build REST API with node.js"});
 });
 // public route
 app.use('/users', users);
+app.use('/data', data);
+app.use('/relay', relay);
 // private route
 // app.use('/movies', validateUser, movies);
 app.get('/favicon.ico', function(req, res) {
@@ -34,6 +40,14 @@ function validateUser(req, res, next) {
   });
   
 }
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+
+})
+
 // express doesn't consider not found 404 as an error so we need to handle 404 explicitly
 // handle 404 error
 app.use(function(req, res, next) {
@@ -50,6 +64,6 @@ app.use(function(err, req, res, next) {
   else 
     res.status(500).json({message: "Something looks wrong :( !!!"});
 });
-app.listen(3000, function(){
- console.log('Node server listening on port 3000');
+app.listen(8080, function(){
+ console.log('Node server');
 });

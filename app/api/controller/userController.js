@@ -1,5 +1,5 @@
 const userModel = require('../model/user');
-const bcrypt = require('bcrypt'); 
+const bcrypt = require('bcryptjs'); 
 const jwt = require('jsonwebtoken');
 
 module.exports = {
@@ -16,38 +16,40 @@ module.exports = {
 				});
 			}
     });
- 	},
-	
- 	login: function(req, res, next) {
-  userModel.findOne({ email: req.body.email}, function(err, user){
-		if (err) {
-			next(err);
-		} else {
-			if(bcrypt.compareSync(req.body.password, user.password)) {
-				const token = jwt.sign({id: user._id}, 
-					req.app.get('secretKey'), { expiresIn: '1h' });
-				res.json({
-					status: "success", 
-					message: "user found", 
-					user: user, 
-					api_token: token
+	 },
+	 
+	 login: function(req, res, next) {
+		userModel.findOne({ email: req.body.email}, function(err, user){
+			if (err) {
+				next(err);
+			} else {
+				if(bcrypt.compareSync(req.body.password, user.password)) {
+					const token = jwt.sign({id: user.id, role: user.role, 
+						admin: user.admin, email: user.email},
+						req.app.get('secretKey'), { expiresIn: '1h' });
+						res.json({
+							status: "success", 
+							message: "user found", 
+							user: user, 
+							api_token: token
+						});
+				}else{
+					res.json({
+						status: "error", 
+						message: "invalid email or password!",
+						user: null
 					});
-			}else{
-				res.json({
-					status: "error", 
-					message: "invalid email or password!",
-					user: null
-				});
+				}
 			}
-		}
-	});
-	},
+		});
+		},
 
 	userUpdate: function(req, res, next){
-		var name = req.body.name;
-		var role = req.body.role;
-	userModel.findByIdAndUpdate(req.params.id, {$set: {'name': name, 'role': role}}, 
-	function(err, user){
+	userModel.findById(req.params.id, function(err, user){
+		user.name = req.body.name;
+		user.role = req.body.role;
+		user.save();
+
 		if(err){
 			next(err)
 		}else{
@@ -74,16 +76,26 @@ module.exports = {
 	})	
 	},
 
-	userAll: function(req, res, next){
-	userModel.find(function(err, user){
+	userDelete: function(req, res, next){
+	userModel.findByIdAndRemove(req.params.id, function(err, user){
 		if(err){
 			next(err)
 		}else{
 			res.json({
 				status: "success",
-				message: "user found",
+				message: "user deleted",
 				user: user
 			})
+		}
+	})	
+	},
+
+	userAll: function(req, res, next){
+	userModel.find(function(err, user){
+		if(err){
+			next(err)
+		}else{
+			res.json(user)
 		}
 	})
 	}
