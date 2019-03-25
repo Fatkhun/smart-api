@@ -14,4 +14,6 @@ router.get('/delete/:id', userController.userDelete);
 // login admin
 // router.post('/admin/login', userController.adminLogin);
 
+// notification
+router.get('/notif', userController.userNotif);
 module.exports = router;
