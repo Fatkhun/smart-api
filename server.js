@@ -7,9 +7,11 @@ const relay = require('./app/api/router/relayRouter');
 const bodyParser = require('body-parser');
 const mongoose = require('./app/api/config/database'); //database configuration
 const cors = require('cors');
-const session = require('express-session');
+const session = require('client-sessions');
+const cookieParser = require('cookie-parser');
 const app = express();
 app.use(cors());
+app.use(cookieParser());
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(logger('dev'));
@@ -27,10 +29,13 @@ app.use('/relay', relay);
 app.get('/favicon.ico', function(req, res) {
     res.sendStatus(204);
 });
+
+// session
 app.use(session({
-  secret: 'djhxcvxfgshjfgjhgsjhfgakjeauytrrrr', // a secret key you can write your own 
-  resave: false,
-  saveUninitialized: true
+    cookieName: 'session',
+    secret: 'session_secret',
+    duration: 15 * 60 * 1000,
+    activeDuration: 15 * 60 * 1000
 }));
 
 // express doesn't consider not found 404 as an error so we need to handle 404 explicitly

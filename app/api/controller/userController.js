@@ -31,7 +31,6 @@ module.exports = {
 				if(bcrypt.compareSync(req.body.password, user.password)) {
 					const token = jwt.sign({id: user.id, email: user.email},
 						config.secret, { expiresIn: '1h' });
-						req.session = user;
 						res.json({
 							status: true, 
 							message: "login success", 
@@ -51,14 +50,11 @@ module.exports = {
 
 	userLogout: function(req, res, next){
 		userModel.findById(req.params.id,function(err){
-			var sess = req.session;
 			if(err){
 				res.json({status: false,message: 'logged out failed!'})
 				next(err)
 			}else{
-				if(sess)
-					req.session = null;
-					res.json({status: true,message: 'User logged out successfully!'})
+				res.json({status: true,message: 'User logged out successfully!'})
 			}
 		})
 	},
