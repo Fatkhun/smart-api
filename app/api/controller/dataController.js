@@ -3,11 +3,15 @@ const dataModel = require('../model/data');
 module.exports = {
   dataCreate: function(req, res, next){
     dataModel.create(req.body, function (err, data) {
-        if (err){ 
+        if (err){
+          res.json({
+            status: false, 
+            message: "Data added failed"
+          }); 
            next(err);
         }else{
            res.json({
-             status: "success", 
+             status: true, 
              message: "Data added successfully", 
              data
           });
@@ -18,10 +22,14 @@ module.exports = {
   dataDelete: function(req, res, next){
   dataModel.findByIdAndRemove(req.params.id, function(err, data){
     if(err){
+      res.json({
+        status: false,
+        message: "data deleted failed"
+      })
       next(err)
     }else{
       res.json({
-        status: "success",
+        status: true,
         message: "data deleted",
         data: data
       })
@@ -63,10 +71,14 @@ module.exports = {
   dataDeleteAll: function(req, res, next){
     dataModel.remove(function(err, data){
       if(err){
+        res.json({
+          status: false,
+          message: "data deleted failed",
+        })
         next(err)
       }else{
         res.json({
-          status: "success",
+          status: true,
           message: "data deleted all",
         })
       }
@@ -74,12 +86,13 @@ module.exports = {
     },
 
   dataAll: function(req, res, next){
+    var limit = parseInt(req.params.limit) || 5
     dataModel.find(function(err, data){
       if(err){
         next(err)
       }else{
         res.json(data)
       }
-    }).sort({_id: -1})
+    }).sort({_id: -1}).limit(limit)
     }
 }

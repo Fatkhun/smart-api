@@ -6,11 +6,10 @@ const data = require('./app/api/router/dataRouter');
 const relay = require('./app/api/router/relayRouter');
 const bodyParser = require('body-parser');
 const mongoose = require('./app/api/config/database'); //database configuration
-var jwt = require('jsonwebtoken');
 const cors = require('cors');
+const session = require('express-session');
 const app = express();
 app.use(cors());
-app.set('secretKey', 'nodeRestApi'); // jwt secret token
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(logger('dev'));
@@ -28,25 +27,11 @@ app.use('/relay', relay);
 app.get('/favicon.ico', function(req, res) {
     res.sendStatus(204);
 });
-function validateUser(req, res, next) {
-  jwt.verify(req.headers['x-access-token'], req.app.get('secretKey'), function(err, decoded) {
-    if (err) {
-      res.json({status:"error", message: err.message, data: null});
-    }else{
-      // add user id to request
-      req.body.userId = decoded.id;
-      next();
-    }
-  });
-  
-}
-
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-
-})
+app.use(session({
+  secret: 'djhxcvxfgshjfgjhgsjhfgakjeauytrrrr', // a secret key you can write your own 
+  resave: false,
+  saveUninitialized: true
+}));
 
 // express doesn't consider not found 404 as an error so we need to handle 404 explicitly
 // handle 404 error
