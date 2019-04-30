@@ -35,11 +35,21 @@ module.exports = {
         })
         next(err)
       }else{
+        res.json(relay)
+      }
+    })
+  },
+
+  relayDetail: function(req, res, next){
+    relayModel.findById(req.params.id, function(err, relay){
+      if(err){
         res.json({
-          status: true,
-          message: "relay update",
-          relay: relay
+          status: false,
+          message: "relay failed",
         })
+        next(err)
+      }else{
+        res.json(relay)
       }
     })
   },

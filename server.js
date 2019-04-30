@@ -12,8 +12,6 @@ const cookieParser = require('cookie-parser');
 const app = express();
 app.use(cors());
 app.use(cookieParser());
-app.use(nocache);
-app.use(header);
 // connection to mongodb
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 app.use(logger('dev'));
@@ -32,29 +30,6 @@ app.get('/favicon.ico', function(req, res) {
     res.sendStatus(204);
 });
 
-// session
-app.use(session({
-    cookieName: 'session',
-    secret: 'session_secret',
-    duration: 15 * 60 * 1000,
-    activeDuration: 15 * 60 * 1000
-}));
-
-/*CORS middleware */
-function header(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
-    next();
-}
-
-function nocache(req, res, next) {
-    res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
-    res.header('Expires', '-1');
-    res.header('Pragma', 'no-cache');
-    next();
-}
-
 // express doesn't consider not found 404 as an error so we need to handle 404 explicitly
 // handle 404 error
 app.use(function(req, res, next) {
@@ -71,6 +46,8 @@ app.use(function(err, req, res, next) {
   else 
     res.status(500).json({message: "Something looks wrong :( !!!"});
 });
+
+
 app.listen(8080, function(){
  console.log('Node server');
 });

@@ -3,10 +3,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const RelaySchema = new Schema({
     pumpOn: {
-      type: Boolean, default: false 
+      type: String, default: "OFF" 
     },
     autoPumpOn: {
-      type: Boolean, default: false 
+      type: String, default: "OFF" 
     },
     time: {
       type: Date, default: Date.now

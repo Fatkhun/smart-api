@@ -14,6 +14,15 @@ const DataSchema = new Schema({
     waterVolume: { 
       type: Number, required: true
     },
+    pumpOn: {
+      type: String
+    },
+    autoPumpOn: {
+      type: String
+    },
+    targetSoil: {
+      type: Number
+    },
     time: {
       type: Date, default: Date.now
     }

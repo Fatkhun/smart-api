@@ -94,5 +94,15 @@ module.exports = {
         res.json(data)
       }
     }).sort({_id: -1}).limit(limit)
+    },
+
+  dataAllItem: function(req, res, next){
+    dataModel.find(function(err, data){
+      if(err){
+        next(err)
+      }else{
+        res.json(data)
+      }
+    }).sort({_id: -1})
     }
 }

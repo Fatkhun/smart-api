@@ -115,15 +115,23 @@ module.exports = {
             body: message, //content of the notification
             sound: "default",
             icon: "ic_launcher" //default notification icon
-        }
+				},
+				headers: {
+					"Authorization": "",
+					"Content-Type": "application/json; charset=utf-8",
+				}
     };
     fcm.send(messages, function(err, notif){
+			try {
 				if (err) {
-					res.json("error");
-					next(err);
-        }else{
-					res.json({ message: 'send notif success', notif});
+					res.json("error")
+				} else {
+					res.json("succes" + notif)
 				}
+			} catch (error) {
+				next(error)
+			}
+			
     });
 	}
 
