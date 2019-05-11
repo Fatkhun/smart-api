@@ -1,6 +1,8 @@
 const express = require('express');
 const logger = require('morgan');
+const socket = require('socket.io');
 // const movies = require('./routes/movies') ;
+const dataSocket = require('./app/api/controller/dataController') 
 const users = require('./app/api/router/userRouter');
 const data = require('./app/api/router/dataRouter');
 const relay = require('./app/api/router/relayRouter');
@@ -47,7 +49,26 @@ app.use(function(err, req, res, next) {
     res.status(500).json({message: "Something looks wrong :( !!!"});
 });
 
-
-app.listen(8080, function(){
- console.log('Node server');
+app.use(function(req,res,next){
+	req.io = io;
+	next();
 });
+
+const server = app.listen(8080, function(){
+ console.log('Node server 8080');
+});
+
+const io = socket(server);
+
+io.on('connection', (socket) => {
+    console.log('socket : ',socket.id);
+    sendData(socket);
+})
+
+function sendData(socket) {
+  socket.on('readSensor', function(data){  
+    
+    io.sockets.emit('readSensor', {data})
+    console.log(data)
+  })  
+}

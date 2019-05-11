@@ -96,13 +96,28 @@ module.exports = {
     }).sort({_id: -1}).limit(limit)
     },
 
-  dataAllItem: function(req, res, next){
-    dataModel.find(function(err, data){
+  dataAllItemByDate: function(req, res, next){
+    var startTime = req.params.startTime;
+    var endTime = req.params.endTime;
+    dataModel.find({time: {
+      $gte: startTime,
+      $lte: endTime
+  } },function(err, data){
       if(err){
         next(err)
       }else{
         res.json(data)
       }
     }).sort({_id: -1})
-    }
+    },
+
+    dataAllItem: function(req, res, next){
+      dataModel.find(function(err, data){
+        if(err){
+          next(err)
+        }else{
+          res.json(data)
+        }
+      }).sort({_id: -1})
+      }
 }

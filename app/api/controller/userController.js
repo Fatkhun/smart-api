@@ -32,15 +32,23 @@ module.exports = {
 			if (err) {
 				next(err);
 			} else {
-				if(bcrypt.compareSync(req.body.password, user.password)) {
-					const token = jwt.sign({id: user.id, email: user.email},
-						config.secret, { expiresIn: '1h' });
+				if(req.body.password != null && user.password != null){
+					if(bcrypt.compareSync(req.body.password, user.password)) {
+						const token = jwt.sign({id: user.id, email: user.email},
+							config.secret, { expiresIn: '1h' });
+							res.json({
+								status: true, 
+								message: "login success", 
+								user: user, 
+								api_token: token
+							});
+					}else{
 						res.json({
-							status: true, 
-							message: "login success", 
-							user: user, 
-							api_token: token
+							status: false, 
+							message: "invalid email or password!",
+							user: null
 						});
+					}
 				}else{
 					res.json({
 						status: false, 
@@ -48,6 +56,7 @@ module.exports = {
 						user: null
 					});
 				}
+				
 			}
 		});
 		},

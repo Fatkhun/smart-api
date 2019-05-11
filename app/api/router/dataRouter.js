@@ -8,6 +8,7 @@ router.get('/delete/:id', dataController.dataDelete);
 router.get('/delete/all', dataController.dataDeleteAll);
 router.get('/average/all', dataController.dataDetailAll);
 // web
+router.get('/index/item/:startTime.:endTime', dataController.dataAllItemByDate);
 router.get('/index/item', dataController.dataAllItem);
 
 module.exports = router;
