@@ -60,15 +60,9 @@ const server = app.listen(8080, function(){
 
 const io = socket(server);
 
-io.on('connection', (socket) => {
-    console.log('socket : ',socket.id);
-    sendData(socket);
-})
+require('./app/api/socket/socket')(io);
 
-function sendData(socket) {
-  socket.on('readSensor', function(data){  
-    
-    io.sockets.emit('readSensor', {data})
-    console.log(data)
-  })  
-}
+// io.on('connection', function(socket){
+//     console.log('ID SOCKET:',socket.id)
+// })
+
