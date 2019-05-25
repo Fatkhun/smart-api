@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const mongoDB = 'mongodb://0.0.0.0:27017/tanidb';
 
-mongoose.connect(mongoDB, { useNewUrlParser: true });
+mongoose.connect(process.env.CUSTOMCONNSTR_MyConnectionString || mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 module.exports = mongoose;
