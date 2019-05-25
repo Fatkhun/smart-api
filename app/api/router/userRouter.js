@@ -7,7 +7,7 @@ const verifyToken = require('./verifyToken')
 router.post('/register', verifyRegister.checkDuplicateUserEmail, userController.register);
 router.post('/login', userController.login);
 router.post('/update/:id', userController.userUpdate);
-router.get('/logout/:id', verifyToken, userController.userLogout);
+router.get('/logout/:id', userController.userLogout);
 router.get('/index/all', userController.userAll);
 router.get('/delete/:id', userController.userDelete);
 

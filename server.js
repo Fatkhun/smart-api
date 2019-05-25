@@ -32,6 +32,19 @@ app.get('/favicon.ico', function(req, res) {
     res.sendStatus(204);
 });
 
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    if (req.method === "OPTIONS") {
+        res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+        return res.status(200).json({});
+    }
+    next();
+});
+
 // express doesn't consider not found 404 as an error so we need to handle 404 explicitly
 // handle 404 error
 app.use(function(req, res, next) {
@@ -61,8 +74,4 @@ const server = app.listen(8080, function(){
 const io = socket(server);
 
 require('./app/api/socket/socket')(io);
-
-// io.on('connection', function(socket){
-//     console.log('ID SOCKET:',socket.id)
-// })
 

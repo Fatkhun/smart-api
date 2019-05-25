@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const relayController = require('../controller/relayController');
+const verifyToken = require('./verifyToken')
 
 router.post('/create', relayController.relayCreate);
 router.post('/update/:id', relayController.relayUpdate);

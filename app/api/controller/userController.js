@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const FCM = require('fcm-node');
-var serverKey="AAAA8aGOjPI:APA91bGeldSPNowh8zwH0Vji1rdSk-kNYXAA2lkrKMjRMBY5D5UPfFmE9R7WmFK4kiaDBU3OD1qcYC1-MoWi6nzUea5VddpQcR_rQ8UVSOjoiJmQocROUnHn6hfVBoiHMs1opddDegrB";
+var serverKey="AAAA8aGOjPI:APA91bG7XAqtIYWuNy_lP3zay8QYcCkbJpmLnT6C9aOlMtTTnWvaCRgnOhnxOFfNpBA5gapQ73h9AJA8NO_-IIiA7iDypqcnfKeopNemYXIbbLtZ6tueseR0aTWYGVkZBDBGQwVnuMie";
 const fcm = new FCM(serverKey);
 
 
@@ -116,21 +116,21 @@ module.exports = {
 	userNotif: function(req, res, next){
     var message = "Hey! you got this notification.";
     var title = "Watering Notification";
-    var token = "dXbQQuvcttQ:APA91bF41_6nzAzXKpFT7Nd_yE3O4jkxur4cacYvZkwA_kp-2EEHA9Advibq50SRf3rW1K7rApPfRiJc_B4S6rzRW6AKXpFa1ksF8RHNhS4CnXXBDrMtGOuEnMR78AygjIHGUo_-MX1-";
-    var messages = { 
-        to: token, 
-        notification: {
-            title: title, //title of notification 
-            body: message, //content of the notification
-            sound: "default",
-            icon: "ic_launcher" //default notification icon
-				},
-				headers: {
-					"Authorization": "",
-					"Content-Type": "application/json; charset=utf-8",
-				}
-    };
-    fcm.send(messages, function(err, notif){
+    var token = "fz-L55klm-0:APA91bFKes_OX0kllm59vq7TpVGE-LjsGd1tnUcHk5l0_H26Rr7LXsF_AAjwBL9Dq4WYE03KHOyoUnqwho6HWVdi5_iIyfrQWF4UFC9Ms7YvibaWM8sxrQEhFLU7Tjo3CnG8hm-9yPQm";
+		var messages = { 
+			to: token, 
+			notification: {
+					title: title, //title of notification 
+					body: message, //content of the notification
+					sound: "default",
+					icon: "ic_launcher" //default notification icon
+			},
+			headers: {
+				"Authorization": "",
+				"Content-Type": "application/json; charset=utf-8",
+			}
+		};
+		fcm.send(messages, function(err, notif){
 			try {
 				if (err) {
 					res.json("error")
@@ -141,7 +141,7 @@ module.exports = {
 				next(error)
 			}
 			
-    });
+		});
 	}
 
 }
