@@ -2,7 +2,7 @@ const dataModel = require('../model/data');
 
 module.exports = {
   dataCreate: function(req, res, next){
-    dataModel.create(req.body, function (err, data) {
+    dataModel.create(req.body, function (err, sensor) {
         if (err){
           res.json({
             status: false, 
@@ -10,11 +10,7 @@ module.exports = {
           }); 
            next(err);
         }else{
-           res.json({
-             status: true, 
-             message: "Data added successfully", 
-             data
-          });
+           res.json({sensor});
         }
       });
   },

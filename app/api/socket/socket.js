@@ -1,5 +1,6 @@
 module.exports = function(io){
   var userSocket = 0;
+  var temper = [];
 
   io.on('connection', function(socket){
     userSocket++;

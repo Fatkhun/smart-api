@@ -40,6 +40,42 @@ module.exports = {
     })
   },
 
+  relayUpdatePump: function(req, res, next){
+    relayModel.findById(req.params.id, function(err, relay){
+      relay.pumpOn = req.body.pumpOn;
+      relay.save();
+      // relay.update(req.body);
+
+      if(err){
+        res.json({
+          status: false,
+          message: "relay update failed"
+        })
+        next(err)
+      }else{
+        res.json(relay)
+      }
+    })
+  },
+
+  relayUpdateAutoPump: function(req, res, next){
+    relayModel.findById(req.params.id, function(err, relay){
+      relay.autoPumpOn = req.body.autoPumpOn;
+      relay.save();
+      // relay.update(req.body);
+
+      if(err){
+        res.json({
+          status: false,
+          message: "relay update failed"
+        })
+        next(err)
+      }else{
+        res.json(relay)
+      }
+    })
+  },
+
   relayDetail: function(req, res, next){
     relayModel.findById(req.params.id, function(err, relay){
       if(err){
