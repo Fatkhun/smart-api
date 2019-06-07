@@ -35,11 +35,13 @@ module.exports = {
 
   dataDetailAll: function(req, res, next){
     var format = "%Y-%m-%d %H:%M"; // minute
+   // var format = "%Y-%m-%d %H"; // 1 hour
+   // var format = "%Y-%m-%d"; // 1 day
     dataModel.find(function(err, data){
         dataModel.aggregate([
-          {
+	{
             $group: {
-              _id: { $dateToString: { format: format, date: "$time" }},
+              _id: { $dateToString: { format: format, date: "$createdAt" }},
               avgTemp: {
                 $avg: '$temp'
               },
@@ -61,6 +63,19 @@ module.exports = {
             res.json(result)
           }
         })
+    })
+  },
+
+  dataDetailItem: function(req, res, next){
+    dataModel.findById(req.params.id, function(err, data){
+      if(err){
+        res.json({
+          message: "not found"
+        })
+        next(err)
+      }else{
+        res.json(data)
+      }
     })
   },
 
@@ -95,7 +110,7 @@ module.exports = {
   dataAllItemByDate: function(req, res, next){
     var startTime = req.params.startTime;
     var endTime = req.params.endTime;
-    dataModel.find({time: {
+    dataModel.find({createdAt: {
       $gte: startTime,
       $lte: endTime
   } },function(err, data){

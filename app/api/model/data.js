@@ -20,12 +20,19 @@ const DataSchema = new Schema({
     autoPumpOn: {
       type: String
     },
+    ruleFuzzyTemp: {
+      type: String
+    },
+    ruleFuzzyHum: {
+      type: String
+    },
+    ruleFuzzyWater: {
+      type: String
+    },
     targetSoil: {
       type: Number
-    },
-    time: {
-      type: Date, default: Date.now
     }
 })
 
+DataSchema.set('timestamps', true);
 module.exports = mongoose.model('Data', DataSchema);
