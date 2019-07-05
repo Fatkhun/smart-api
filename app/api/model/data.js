@@ -26,6 +26,9 @@ const DataSchema = new Schema({
     ruleFuzzyHum: {
       type: String
     },
+    ruleFuzzySoil: {
+      type: String
+    },
     ruleFuzzyWater: {
       type: String
     },

@@ -26,7 +26,7 @@ module.exports = {
 			}
     });
 	 },
-	 
+
 	 login: function(req, res, next) {
 		userModel.findOne({ email: req.body.email}, function(err, user){
 			if (err) {
@@ -34,10 +34,10 @@ module.exports = {
 			} else {
 				if(req.body.password != null && user.password != null){
 					if(bcrypt.compareSync(req.body.password, user.password)) {
-						const token = jwt.sign({id: user.id, email: user.email},
-							config.secret, { expiresIn: '1h' });
-							res.json({
-								status: true, 
+						const token = jwt.sign({id: user._id, email: user.email},
+						config.secret, { expiresIn: '1h' });
+res.json({
+								status: true,
 								message: "login success", 
 								user: user, 
 								api_token: token
@@ -62,12 +62,12 @@ module.exports = {
 		},
 
 	userLogout: function(req, res, next){
-		userModel.findById(req.params.id,function(err){
+		userModel.findById(req.params.id,function(err, user){
 			if(err){
-				res.json({status: false,message: 'logged out failed!'})
+				res.json({status: false, message: 'logged out failed!'})
 				next(err)
 			}else{
-				res.json({status: true,message: 'User logged out successfully!'})
+				res.json({status: true, message: 'User logged out successfully!'})
 			}
 		})
 	},

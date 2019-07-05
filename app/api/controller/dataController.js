@@ -1,4 +1,5 @@
 const dataModel = require('../model/data');
+const moment = require('moment');
 
 module.exports = {
   dataCreate: function(req, res, next){
@@ -41,7 +42,7 @@ module.exports = {
         dataModel.aggregate([
 	{
             $group: {
-              _id: { $dateToString: { format: format, date: "$createdAt" }},
+              _id: { $dateToString: { format: format, date: "$createdAt", timezone:'Asia/Jakarta' }},
               avgTemp: {
                 $avg: '$temp'
               },
